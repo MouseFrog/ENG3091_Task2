@@ -9,9 +9,9 @@ double g(double x){
     return 0.5 * (x + 5.0 / x); 
 }
 
-// oldGuess is the starting value for the algorithm
-// num_iters is the maximum number of times the loop will run to try to find the root  
-// tol is how small the change must be to stop for convergence
+/* oldGuess is the starting value for the algorithm
+num_iters is the maximum number of times the loop will run to try to find the root 
+tol is how small the change must be to stop for convergence*/
 double fixed_point(double(*g)(double), double oldGuess, int num_iters = 1000, double tol = 1e-6)  
 {
 
@@ -29,8 +29,9 @@ for (int current_iter = 0; current_iter < num_iters; current_iter ++) {
          << calcGuess 
          << endl;
 
-// Compares the new and old guess to see how much the value is still changing.
-// If the difference is smaller than the tolerance, it means the updates are now extremely small and the method has stabilised, so we stop and return the result.
+/* Compares the new and old guess to see how much the value is still changing.
+If the difference is smaller than the tolerance, it means the updates are now extremely
+small and the method has stabilised, so we stop and return the result */
     if (std::fabs(calcGuess - oldGuess) < tol) {
         cout << "Solution converges at iteration step " << current_iter + 1 << endl;
     return calcGuess; 
@@ -40,8 +41,8 @@ for (int current_iter = 0; current_iter < num_iters; current_iter ++) {
     oldGuess = calcGuess;
 }
 
-// This only runs if the loop finishes (it reached num_iters) without converging.
-// It prints a warning and returns NaN to indicate that no valid result was found.
+/* This only runs if the loop finishes (it reached num_iters) without converging
+It prints a warning and returns NaN to indicate that no valid result was found */
 cout << "Warning: Method did not converge within the maximum number of iterations" << endl;
 return std::numeric_limits<double>::quiet_NaN();
 
