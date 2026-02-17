@@ -3,6 +3,7 @@
 #include <limits>
 using namespace std;
 
+
 // Defining the function f(x) that Newton’s method will solve
 double f(double x) {
     return exp(-0.1 * x) * sin(2.0 * x);
@@ -33,6 +34,7 @@ for (int current_iter = 0; current_iter < num_iters; current_iter++) {
         return std::numeric_limits<double>::quiet_NaN();
     }
 
+
 // Uses the Newton formula to update the current guess and move closer to the root
     calcGuess = oldGuess - (f_val / df_val);
 
@@ -52,6 +54,8 @@ for (int current_iter = 0; current_iter < num_iters; current_iter++) {
     cout << "Warning: divergence" << endl;
     return std::numeric_limits<double>::quiet_NaN();
 }
+
+testest
 
 int main() {
 
