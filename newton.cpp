@@ -14,15 +14,17 @@ double df(double x) {
     return exp(-0.1 * x) * (2.0 * cos(2.0 * x) - 0.1 * sin(2.0 * x));
 }
 
-// oldGuess is the starting value that gets plugged into the Newton formula and updated each loop
-// int &steps keeps track of how many iterations were used so main() can access that value
+/* oldGuess is the starting value that gets plugged into the Newton 
+formula and updated each loop int &steps keeps track of how many 
+iterations were used so main() can access that value */
 double newton_raphson(double(*func)(double), double(*dfunc)(double), double oldGuess, int &steps, int num_iters = 100, double tol = 1e-6)
 {
 // calcGuess stores the updated value calculated using the Newton formula
     double calcGuess;
 
-// The loop evaluates f(x) and f'(x) before applying the Newton formula.
-// If the derivative is too small, the division would be invalid, so the method stops and returns divergence.
+/* The loop evaluates f(x) and f'(x) before applying the Newton formula. 
+ If the derivative is too small, the division would be invalid, 
+ so the method stops and returns divergence. */
 for (int current_iter = 0; current_iter < num_iters; current_iter++) {
 
     double f_val  = func(oldGuess);
@@ -38,8 +40,8 @@ for (int current_iter = 0; current_iter < num_iters; current_iter++) {
 // Uses the Newton formula to update the current guess and move closer to the root
     calcGuess = oldGuess - (f_val / df_val);
 
-// Compares the new and old guess to see if the value has stabilised.
-// If the difference is below the tolerance, the loop stops and returns the result.    
+/* Compares the new and old guess to see if the value has stabilised
+If the difference is below the tolerance, the loop stops and returns the result */  
     if (std::fabs(calcGuess - oldGuess) < tol) {
         steps = current_iter + 1;
         return calcGuess;
@@ -48,8 +50,8 @@ for (int current_iter = 0; current_iter < num_iters; current_iter++) {
     oldGuess = calcGuess;
 }
 
-// Runs if the loop finishes (it reached num_iters) without meeting the tolerance condition.
-// It resets the step counter, prints a warning, and returns NaN to indicate that no valid root was found.
+/* Runs if the loop finishes (it reached num_iters) without meeting the tolerance condition
+ It resets the step counter, prints a warning, and returns NaN to indicate that no valid root was found */
     steps = 0;
     cout << "Warning: divergence" << endl;
     return std::numeric_limits<double>::quiet_NaN();
