@@ -9,9 +9,9 @@ int main() {
     // Open a file named "prices.csv"
     std::ofstream myFile("prices.csv");
 
-    // 3. Check if the file opened correctly
+    // Check if file opened correctly
     if (myFile.is_open()) {
-        // Add a header (optional, but good for Python/Excel)
+        // Add header (optional, but good for Python/Excel)
         myFile << "Price" << std::endl;
 
         // Range based loop: 1st iteration: val = first value in house_price, 2nd iteration: val = second value in house_price
@@ -19,11 +19,11 @@ int main() {
             myFile << val << std::endl; 
         }
 
-        // 5. Close the file
+        // Close file
         myFile.close();
-        std::cout << "Successfully wrote to prices.csv" << std::endl;
+        std::cout << "Successfully wrote to prices.csv" << std::endl; // Success prompt
     } else {
-        std::cerr << "Unable to open file!" << std::endl; // Raise error
+        std::cerr << "Unable to open file!" << std::endl; // Raise error if unable to open file
     }
 
     return 0;
