@@ -55,8 +55,6 @@ for (int current_iter = 0; current_iter < num_iters; current_iter++) {
     return std::numeric_limits<double>::quiet_NaN();
 }
 
-
-
 int main() {
 
 // iterations_taken stores how many steps were required for convergence
