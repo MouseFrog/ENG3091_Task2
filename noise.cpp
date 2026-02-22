@@ -15,10 +15,10 @@ int main() {
     // Initialise bedroom number vector 
     std::vector <double> bedroom(100); // 100 points
 
-    // Generate bedroom data points
+    // Generate bedroom data points with equation form y = mx + c
     for (int i=0; i<100; i++) {
         bedroom[i]=distribute(mt_num);
-        house_prices[i] = 50*bedroom[i]+100;
+        house_prices[i] = 50*bedroom[i]+100; // m = 50, c = 100
     }
     
 
