@@ -5,7 +5,7 @@
     
 // Default data values for equation
 // Optimise arguments for generate_data()
-struct ValuesConfig {
+struct Dataset {
     // Range for number of bedrooms
     double bed_min = 1.0;   
     double bed_max = 5.0;
@@ -17,6 +17,13 @@ struct ValuesConfig {
     double w_bedroom = 50000.0;
     double w_area = 1600.0;
 };
+
+struct Matrices {
+    // Matrices 
+    std::vector<std::vector<double>> x_var;
+    std::vector<double> y;
+};
+
 
 // Generate random values for variables
 double getRandomValue(std::mt19937& mt_num, double min, double max)
@@ -73,57 +80,6 @@ int main() {
     
     return 0;
 }    
-    
-    /*
-// Generate random values for variables
-double getRandomValue(std::mt19937& mt_num, double min, double max){
-    std::uniform_int_distribution<> variable_dist(min,max);
-    double variable_val = variable_dist(mt_num);
-    return variable_val;
-}*/
-
-/*
-// Fill up matrices based on random generated data and equations
-// Access ValuesConfig for pre-set equation parameters
-void generate_data(std::vector<std::vector<double>>& var_matrix, 
-                           std::vector<double>& price_matrix, 
-                           const ValuesConfig& config, // Access values from ValuesConfig
-                           std::mt19937& mt_num) {  // Engine 
-
-    for (int i = 0; i < var_matrix.size(); i++) {
-
-        // Generate random variable values
-        double bedroom = getRandomValue(mt_num, config.bed_min, config.bed_max);
-        double area = getRandomValue(mt_num, config.area_min, config.area_max);
-
-        // Fill up matrix column with respective values
-        const double intercept = 1.0;
-        var_matrix[i][0] = intercept; // Reserved for intercept and math manipulation later on
-        var_matrix[i][1] = bedroom;
-
-        // Multi-Varible Calculations
-        if (var_matrix[i].size() >1){   //Check if matrix is multi-variable
-        var_matrix[i][2] = area;
-        price_matrix[i] = config.w_intercept + (config.w_bedroom * bedroom) + (config.w_area * area);
-
-        }
-        else {//Single Variable Calculations
-        price_matrix[i] = config.w_intercept + (config.w_bedroom * bedroom);  }
-        
-    }
-}*/
-/*
-// Adds noise to each individual data point
-void calc_noise(std::vector <double>& data_in, std::mt19937& mt_num){ // Pass by reference alters original dataset, return nothing
-    double current_sum = 0;
-    for (int i=0; i<data_in.size(); i++){
-        double indiv_dev = data_in[i] * 0.05;   // Calc standard deviation for each point to apply noise
-        // Gaussian White Noise
-        std::normal_distribution<double> noise_dist(0.0, indiv_dev);
-        double noise = noise_dist(mt_num);
-        data_in[i]=data_in[i]+noise;
-    }
-}*/
 
 // Transpose matrix
 std::vector<std::vector<double>> transposeMatrix(const std::vector<std::vector<double>>& matrix_in){
@@ -187,17 +143,21 @@ void saveFile(const std::vector<std::vector<double>>& data_in, std::string file_
 
 // DATA GENERATION
 class DataGenerator {
-
-// Only the functions inside this class can see these variables
-private:
+private:    // Only the functions inside this class can see these variables
     std::mt19937 mt_num;
-    ValuesConfig config;
+    Dataset data;
 
 public:
-    // CONSTRUCTOR: This is where you put the "setup" instructions.
-    DataGenerator(ValuesConfig c) : config(c) {
+    // Constructor: take package c from int main() and copy into private Dataset data
+    DataGenerator(Dataset c) : data(c) {    
         std::random_device device_num;
         mt_num.seed(device_num()); 
+    }
+
+    Matrices make_matrix(int sample_size, int num_features){
+        Matrices matrix; 
+        matrix.x_var.resize(sample_size,std::vector<double>(num_features+1));
+        matrix.y.resize(sample_size)
     }
 
     void generate_data(std::vector<std::vector<double>>& var_matrix, 
