@@ -3,6 +3,30 @@
 #include <numeric>
 
 
+// Create a class that holds the learnable parameters
+// Allows for storage of different states as the model improves
+
+#include <iostream>
+#include <vector>
+
+class LinearRegression {
+public: // Classes are private by default, make public
+
+    double w = 0.0;     // Weight (slope)
+    double b = 0.0;     // Bias (y-intercept)
+    double alpha;       // Learning rate
+
+    // Store lr value into alpha, ramains in LinearRegression object throughout iteration
+    LinearRegression(double lr) : alpha(lr) {}
+
+    // Prediction function: y_hat = wx + b
+    double predict(double x) {
+        return w * x + b;
+    }
+};
+
+
+
 class SimpleLinearRegression {
 
     // Learning parameters
@@ -17,10 +41,11 @@ public:
 
         // Summation of all data points per variable manipulatoin
         for (int i = 0; i < n; i++) {
-            sumX += x[i];
+            double var_col = x[i][1]    // Extract variable column, ignore intercept column
+            sumX += var_col;
             sumY += y[i];
-            sumXY += x[i] * y[i];
-            sumX2 += x[i] * x[i];
+            sumXY += var_col * y[i];
+            sumX2 += var_col * var_col;
             
         }
 
@@ -29,7 +54,7 @@ public:
         intercept = (sumY - slope * sumX) / n;
     }
 
-    // Function to return line 
+    // Substitute x-val of interest into prediction eqn for y-val 
     double predict(double x) {
         return intercept + slope * x;
     }

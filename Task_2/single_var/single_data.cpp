@@ -54,3 +54,21 @@ int main() {
 
     return 0;
 }
+
+//Simple Linear Regression
+/*
+int main() {
+    // Data: {Square Footage} -> {Price in $1000s}
+    std::vector<double> x = {1500, 2000, 1200, 2500, 1800};
+    std::vector<double> y = {300, 400, 250, 500, 360};
+
+    SimpleLinearRegression slr;
+    slr.train(x, y);
+
+    double newHouse = 2200;
+    std::cout << "Predicted price for 2200 sqft: $" << slr.predict(newHouse) << "k" << std::endl;
+    
+    return 0;
+}
+
+*/
