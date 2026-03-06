@@ -1,3 +1,5 @@
+// Contains the implementation of the Linear Regression algorithms
+// This file performs the actual parameter calculations during training
 #include "LinearRegression.hpp"
 
 // Train the model using the dataset of bedrooms and prices

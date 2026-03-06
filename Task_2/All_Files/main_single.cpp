@@ -1,3 +1,5 @@
+// Main program for testing single-variable linear regression
+// Generates a dataset, trains the model, and prints the results
 #include <iostream>
 #include <vector>
 #include <fstream>

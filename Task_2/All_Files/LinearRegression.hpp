@@ -1,4 +1,6 @@
-#ifndef SIMPLE_LINEAR_REGRESSION_HPP
+// Declares the Linear Regression model used in this project
+// This file defines the class structure but not the function implementations
+#ifndef SIMPLE_LINEAR_REGRESSION_HPP 
 #define SIMPLE_LINEAR_REGRESSION_HPP
 
 #include <vector>
