@@ -1,7 +1,7 @@
 // Declares the Linear Regression model used in this project
 // This file defines the class structure but not the function implementations
-#ifndef SIMPLE_LINEAR_REGRESSION_HPP 
-#define SIMPLE_LINEAR_REGRESSION_HPP
+#ifndef LINEAR_REGRESSION_HPP
+#define LINEAR_REGRESSION_HPP
 
 #include <vector>
 
@@ -17,6 +17,14 @@ public:
     void train(const std::vector<double>& bedroom_values,
                const std::vector<double>& price_values);
 
+   
+    // Gradient descent training
+    void train_gradient(const std::vector<double>& bedroom_values,
+                        const std::vector<double>& price_values,
+                        double learning_rate,
+                        int num_iterations);
+                    
+    // Predicts price 
     double predict(double bedrooms);
 };
 

@@ -76,22 +76,48 @@ int main() {
     std::cout << "Data written to prices.csv" << std::endl;
 
 
-    // Create the regression model and train it using the generated dataset
-    SimpleLinearRegression model;
-    model.train(bedroom_values, price_values);
+    // Train using Normal Equation
+    SimpleLinearRegression normal_model;
+    normal_model.train(bedroom_values, price_values);
+
+    // Train using Gradient Descent
+    SimpleLinearRegression gradient_model;
+
+    gradient_model.train_gradient(
+        bedroom_values,
+        price_values,
+        0.01,   // learning rate
+        5000    // iterations
+    );
 
 
-    // Print the estimated parameters and compare them with the true values
+    // Print Normal Equation results
     std::cout << "\n--- Normal Equation Results ---" << std::endl;
 
     std::cout << "Estimated price per bedroom (w): "
-              << model.w
+              << normal_model.w
               << " | True: "
               << true_price_per_bedroom
               << std::endl;
 
     std::cout << "Estimated base price (b): "
-              << model.b
+              << normal_model.b
+              << " | True: "
+              << true_base_price
+              << std::endl;
+
+
+    // Print Gradient Descent results
+    std::cout << "\n--- Gradient Descent Results ---" << std::endl;
+
+    std::cout << "Estimated price per bedroom (w): "
+              << gradient_model.w
+              << " | True: "
+              << true_price_per_bedroom
+              << std::endl;
+
+    std::cout << "Estimated base price (b): "
+              << gradient_model.b
               << " | True: "
               << true_base_price
               << std::endl;
