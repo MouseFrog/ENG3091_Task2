@@ -16,9 +16,6 @@ int main() {
     // Random bedroom values between 1 and 5
     std::uniform_int_distribution<int> bedroom_dist(1, 5);
 
-    // Small noise applied to bedroom
-    std::uniform_real_distribution<double> bedroom_noise(-0.1, 0.1);
-
     // Noise added to price
     std::uniform_real_distribution<double> price_noise(-4000.0, 4000.0);
 
@@ -51,14 +48,11 @@ int main() {
     // Each iteration creates one house entry
     for (int i = 0; i < num_houses; i++) {
 
-        int base_bedrooms = bedroom_dist(gen);
-
-        // Add small noise to the bedroom value
-        double bedrooms = base_bedrooms + bedroom_noise(gen);
+        double bedrooms = bedroom_dist(gen);
 
         // Compute the price using the true model with added noise
         double price =
-            (true_price_per_bedroom * base_bedrooms)
+            (true_price_per_bedroom * bedrooms)
             + true_base_price
             + price_noise(gen);
 
