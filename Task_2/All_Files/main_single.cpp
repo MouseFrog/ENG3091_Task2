@@ -23,7 +23,7 @@ int main() {
     std::uniform_real_distribution<double> price_noise(-4000.0, 4000.0);
 
 
-    // True price parameters
+    // The orignal slope and intercept used to generate the dataset
     double true_price_per_bedroom = 50000.0;
     double true_base_price = 50000.0;
 
