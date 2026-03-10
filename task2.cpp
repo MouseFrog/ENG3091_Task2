@@ -20,21 +20,21 @@ int main() {
 
 //Multiple Linear Regression
 class MultipleLinearRegression {
-    std::vector<double> weights; 
-    double learningRate;
+    std::vector<double> weights; // Vector holding weights and intercept
+    double learningRate;    // Step-size
 
 public:
-    MultipleLinearRegression(int numFeatures, double lr = 0.01) : learningRate(lr) {   
-        // Create vector of size according to # of variables, fill with 0.0
-        // +1 to include intercept at weights[0]
+    MultipleLinearRegression(int numFeatures, double lr = 0.01) : learningRate(lr) {    
+        // Create vector of size according to # of variables + Intercept and fill with 0.0
+        // Resized within constructor so it isn't altered accidentally, causing size mismatch 
         weights.resize(numFeatures + 1, 0.0); 
     }
 
-    void train(const std::vector<std::vector<double>>& X, const std::vector<double>& y, int epochs) {
+    void train(const std::vector<std::vector<double>>& X, const std::vector<double>& Y, int version) {
         int m = X.size();    // Number of samples, row
         int n = X[0].size(); // Number of features, col
 
-        for (int e = 0; e < epochs; e++) {  // # of iterations
+        for (int v = 0; v < version; v++) {  // # of iterations
             std::vector<double> gradients(n + 1, 0.0);  
 
             
@@ -44,7 +44,7 @@ public:
                 }
                 
                  // Calculate error in y-val prediction
-                double error = prediction - y[i];  
+                double error = prediction - Y[i];  
                 //gradients[0] += error;
                 for (int j = 0; j < n; j++) {
                     //gradients[j + 1] += error * X[i][j];
