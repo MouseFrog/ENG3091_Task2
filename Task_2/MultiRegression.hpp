@@ -44,6 +44,8 @@ public:
 
     void generate_data(std::vector<std::vector<double>>& var_matrix, std::vector<double>& price_matrix);
     void calc_noise(std::vector<double>& price_matrix);
+
+    void updateSettings(Dataset new_c);
 };
 
 // Save file function
