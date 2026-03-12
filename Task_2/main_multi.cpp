@@ -8,24 +8,43 @@ int main() {
 
     // Create Dataset instance and define parameters, otherwise uses default
     Dataset custom;
-    custom.bed_max = 10;
-    custom.area_min = 15;
-    custom.area_max = 1400;
 
-    DataGenerator gen(custom); // Create instance with custom settings
+    // Generate Matrix with custom settings
+    DataGenerator gen(custom); 
     int num_features{2};
     Matrices myMatrix = gen.make_matrix(100,num_features);
 
-    GradientDescent mlr(num_features,0.001);
-    int num_iterations{10};
-    mlr.train(myMatrix.X,myMatrix.Y,num_iterations);
-    std::vector<double> finalWeights = mlr.getWeights();
+    // Normalise data
+    NormResult norm_X =  normaliseData(myMatrix.X);
 
-    std::cout<<finalWeights[0]<<"\n"
-    <<finalWeights[1]<<"\n"
-    <<finalWeights[2]<<"\n";
+    // Train model
+    GradientDescent mlr(num_features,0.1);
+    int num_iterations{100000};
+    mlr.train(norm_X.matrix,myMatrix.Y,num_iterations);
+    std::vector<double> model_weights = mlr.getWeights();
 
-    saveFile(myMatrix.X,"og file" );
+    std::cout<<
+    "Model Intercept: "<<model_weights[0]<<"\n"<<
+    "Model Bedroom Weight: "<<model_weights[1]<<"\n"<<
+    "Model Area Weight: "<<model_weights[2]<<"\n";
+
+    //normweight/std_dev
+    double real_bedroom = model_weights[1]/norm_X.std_devs[1];
+    double real_area = model_weights[2]/norm_X.std_devs[2];
+    double real_intercept = model_weights[0]-(real_bedroom * norm_X.means[1])-(real_area * norm_X.means[2]);
+
+    std::cout <<
+    "Real Intercept: "<<real_intercept<<"\n"<<
+    "Real Bedroom Weight: "<<real_bedroom<<"\n"<<
+    "Real Area Weight: "<<real_area<<"\n";
+
+    std::cout<<
+    "Intercept std_dev: "<<norm_X.std_devs[0]<<"\n"<<
+    "Bedroom std_dev: "<<norm_X.std_devs[1]<<"\n"<<
+    "Area std_dev: "<<norm_X.std_devs[2]<<"\n";
+
+    saveFile(myMatrix.X,"variables" );
+    saveFile(myMatrix.Y,"prices");
     
     return 0;
 }    
