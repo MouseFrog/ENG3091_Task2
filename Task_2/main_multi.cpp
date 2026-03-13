@@ -8,7 +8,6 @@ int main() {
 
     // Create Dataset instance and define parameters, otherwise uses default
     Dataset custom;
-    custom.bed_min=2;
 
     // Generate Matrix with custom settings
     DataGenerator gen(custom); 
