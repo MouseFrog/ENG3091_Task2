@@ -10,15 +10,15 @@
 // Default parameter values for equation
 struct Dataset {
     // Range for number of bedrooms
-    int bed_min = 1;   
-    int bed_max = 5;
+    int bed_min{1};   
+    int bed_max{5};
     // Range for land area
-    double area_min = 25.0;
-    double area_max = 1000.0;
+    double area_min{25.0};
+    double area_max{1000.0};
     // Weights of variables
-    double w_intercept = 50000.0; 
-    double w_bedroom = 50000.0;
-    double w_area = 1600.0;
+    double w_intercept{50000.0}; 
+    double w_bedroom ={50000.0};
+    double w_area ={1600.0};
 };
 
 // Used to create matrix instances
