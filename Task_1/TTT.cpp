@@ -5,10 +5,10 @@
 int manual_move(std::string input_prompt) {
     while (true) { 
         std::cout << input_prompt << std::endl;
-        // Validate input
+        // Validate input via type and range
         int input_value;
-        if (std::cin >> input_value){ // If input is integer, it will pass from std::cin buffer stored into input_value variable
-            if (input_value < 10 && input_value > 0) { // Check if input is within `range 1~9
+        if (std::cin >> input_value){ // If input is integer, pass from std::cin buffer into input_value variable
+            if (input_value < 10 && input_value > 0) { // Check input range
             std::cin.ignore(99999, '\n'); // Clear buffer for next input
             return input_value;
             
@@ -17,7 +17,7 @@ int manual_move(std::string input_prompt) {
         else {
         // Invalid input
         std::cout << "Invalid Input" << std::endl;
-        std::cin.clear();
+        std::cin.clear();   // Clear interface
         std::cin.ignore(99999, '\n');
         }
     }
@@ -26,8 +26,8 @@ int manual_move(std::string input_prompt) {
 // Computer move
 int comp_move(){
     std::random_device rand; // Random number generated from hardware 
-    std::mt19937 mt_num(rand()); // mt19937: Mersenne Twister pseudo-random generator 
-    std::uniform_int_distribution<> distr(1, 9);  // Value range 1 to 9
+    std::mt19937 mt_num(rand()); // Seed generator  
+    std::uniform_int_distribution<> distr(1, 9);  // Get integer between 1 to 9
     return distr(mt_num);
 }
 
@@ -42,12 +42,15 @@ void printboard(char board[3][3]) {
     
 // Check Win
 bool isWinner(char board[3][3],char Player){    
-    // Horizontal and Vertical Wins
+    
+    // Vertical Wins
     for (int i=0; i<3; i++) {
         if (board[i][0]==Player && board[i][1]==Player && board[i][2]==Player) {
             std::cout <<"Player"<<Player<<"wins!"<<std::endl;
             return true;
         }
+
+        // Horizontal wins
         if (board[0][i]==Player && board[1][i]==Player && board[2][i]==Player) {
             std::cout <<"Player"<<Player<<" wins!"<<std::endl;
             return true;
@@ -70,12 +73,12 @@ bool isFullboard(char board[3][3]) {
     for (int i=0; i<3; i++) {
         for (int j=0; j<3; j++) {
             if (board[i][j] == '-') {
-                return false; // board has space
+                return false; // Board has space
             
             }
         }
     }
-    return true; // full board
+    return true; // Full board
 }
 
 
@@ -86,7 +89,7 @@ int main() {
     const char playerO = 'O';
     char current_player = playerX;
 
-    // Initialise board
+    // Initialise board with default symbol 
     char myboard[3][3]={
         {'-','-','-'},
         {'-','-','-'},
@@ -95,17 +98,16 @@ int main() {
     
     printboard(myboard);
     
-
     while (true) {
         
         int input_val;
         
-        // Computer's move
+        // Computer generated value
         if (current_player == playerO){
             input_val = comp_move();
         }
 
-        // User's move
+        // User input value
         else {
             input_val = manual_move("Enter move (1-9):");
         }

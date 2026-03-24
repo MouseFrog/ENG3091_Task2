@@ -14,7 +14,6 @@ void GradientDescent::train(const std::vector<std::vector<double>>& X,
 
     int m = X.size();    // Number of samples, row
     int n = X[0].size(); // # of weights including intercept
-    hi;
 
     for (int e = 0; e < iteration; e++) {  // # of iteration
         std::vector<double> gradients(n, 0.0);  
