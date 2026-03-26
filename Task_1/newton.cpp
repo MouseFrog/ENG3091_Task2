@@ -1,3 +1,6 @@
+// g++ newton.cpp -o"newton.exe"
+// Copy and paste above command into terminal to compile
+
 #include <iostream>
 #include <cmath>
 #include <limits>

@@ -1,5 +1,6 @@
-// g++ main_single.cpp DataGenerator.cpp GradientDescent.cpp Normal.cpp Utilities.cpp
-// Copy above command for compiling
+// Single-Variable Regression: Normal Gradient method and Gradient Descent method
+// g++ main_single.cpp DataGenerator.cpp GradientDescent.cpp Normal.cpp Utilities.cpp -o"single.exe"
+// Copy and paste above command into terminal to compile
 
 #include <iostream>
 #include <vector>
@@ -13,23 +14,24 @@ int main() {
     Dataset custom;
     DataGenerator gen(custom);
 
-    // Generate matrix with 1 independent variable
-    int data_points{100};
-    int num_features{1};
+    // Generate variables matrix
+    int data_points{100};   // Sample size 100
+    int num_features{1};    // 1 independent variable
     Matrices singleMatrix = gen.make_matrix(data_points,num_features);
 
     // NORMAL GRADIENT MODEL
-    Normal norm_model;
+    Normal norm_model;  
     norm_model.train(singleMatrix.X, singleMatrix.Y);
 
     std::pair<double,double> norm_weights = norm_model.getWeights();
+
     std::cout<<"Normal Gradient inctercept: "
              <<norm_weights.first<< "\n"
              <<"Normal Gradient gradient: "
              <<norm_weights.second<<std::endl;
-    double interpolate_x {5};
-    double predict_price = norm_model.predict(5.0);
-    std::cout<<"Predicted price based on Normal method:"<<predict_price<<std::endl;
+    double interpolate_x{5.0};
+    double predict_price = norm_model.predict(interpolate_x);
+    std::cout<<"Predicted price of " <<interpolate_x<< " bedrooms based on Normal method:"<<"$"<<predict_price<<std::endl;
 
 
 

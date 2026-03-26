@@ -47,10 +47,10 @@ void saveFile(const std::vector<std::vector<double>>& X,
 // Z-VALUE NORMALISATION
 // Mean = 0.0
 // Standard Deviation = 1.0
-NormResult normaliseData(const std::vector<std::vector<double>>& var_matrix){
+NormResult normaliseData(const std::vector<std::vector<double>>& X){
 
-    int m = var_matrix.size();    // rows
-    int n = var_matrix[0].size(); // cols
+    int m = X.size();    // rows
+    int n = X[0].size(); // cols
 
     NormResult result;
     result.matrix.resize(m,std::vector<double>(n)); // Matrix to hold normalised values
@@ -69,7 +69,7 @@ NormResult normaliseData(const std::vector<std::vector<double>>& var_matrix){
         // Summation of variable values
         double value_sum{0};
         for(int i = 0; i < m ; i++){
-            value_sum += var_matrix[i][j];
+            value_sum += X[i][j];
         }
 
         // Mean of variable 
@@ -79,7 +79,7 @@ NormResult normaliseData(const std::vector<std::vector<double>>& var_matrix){
         // Summation of square error
         double error_sum{0};
         for (int i = 0; i < m; i++) {
-            error_sum += std::pow((var_matrix[i][j]-mean), 2);  // sqaure error = (x_val - mean)^2
+            error_sum += std::pow((X[i][j]-mean), 2);  // sqaure error = (x_val - mean)^2
 
         }
 
@@ -98,7 +98,7 @@ NormResult normaliseData(const std::vector<std::vector<double>>& var_matrix){
         //x_normalised = (x - mean)/std_dev
         else {
             for (int i = 0; i < m; i++){
-            result.matrix[i][j] = (var_matrix[i][j]-mean)/std_dev;
+            result.matrix[i][j] = (X[i][j]-mean)/std_dev;
             }
         }
         

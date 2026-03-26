@@ -1,5 +1,6 @@
-// g++ main_multi.cpp DataGenerator.cpp GradientDescent.cpp Utilities.cpp
-// Copy above command for compiling
+// Multi-Variable Regression 
+// g++ main_multi.cpp DataGenerator.cpp GradientDescent.cpp Utilities.cpp -o"multi.exe"
+// Copy and paste above command into terminal to compile
 
 #include <iostream>
 #include <vector>   // for std::vector
@@ -45,17 +46,21 @@ int main() {
     "Multi Bedroom Weight: "<<real_bedroom<<"\n"<<
     "Multi Area Weight: "<<real_area<<"\n";
 
-    /*
+    /* 
+    // Debugging
+    //Normalised weight
     std::cout<<
     "Model Intercept: "<<model_weights[0]<<"\n"<<
     "Model Bedroom Weight: "<<model_weights[1]<<"\n"<<
     "Model Area Weight: "<<model_weights[2]<<"\n";
 
+    // Standard Deviations Calculated
     std::cout<<
     "Intercept std_dev: "<<norm_X.std_devs[0]<<"\n"<<
     "Bedroom std_dev: "<<norm_X.std_devs[1]<<"\n"<<
     "Area std_dev: "<<norm_X.std_devs[2]<<"\n";
     */
+    
     saveFile(multiMatrix.X,multiMatrix.Y,"MultiVariableData");
 
 

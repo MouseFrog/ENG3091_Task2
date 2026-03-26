@@ -25,48 +25,48 @@ double DataGenerator::getRandomValue(double min, double max){  // Specify value 
     double variable_val = variable_dist(mt_num);    // generated from same seed
     return variable_val;
 }
-int DataGenerator::getRandomValue(int min, int max){      // Overload function for generating bedroom values (integer)
+int DataGenerator::getRandomValue(int min, int max){      // Overload function to generate bedroom values (integer)
     std::uniform_int_distribution<> variable_dist(min,max);
     int variable_val = variable_dist(mt_num);    
     return variable_val;
 }
 
 // FILL MATRICES
-void DataGenerator::generate_data(std::vector<std::vector<double>>& var_matrix, 
-                                  std::vector<std::vector<double>>& price_matrix) {  
+void DataGenerator::generate_data(std::vector<std::vector<double>>& X, 
+                                  std::vector<std::vector<double>>& Y) {  
 
-    for (int i = 0; i < var_matrix.size(); i++) {
+    for (int i = 0; i < X.size(); i++) {
 
         // Generate random variable values
         int bedroom = getRandomValue(data.bed_min, data.bed_max);
         double area = getRandomValue(data.area_min, data.area_max);
 
         // Fill up matrix column with respective values
-        var_matrix[i][0] = 1.0; // Reserved for intercept and math manipulation later on
-        var_matrix[i][1] = bedroom; // Bedroom # values stored in second column
+        X[i][0] = 1.0; // Reserved for intercept and math manipulation later on
+        X[i][1] = bedroom; // Bedroom # values stored in second column
 
         // Multi-Varible Calculations
-        if (var_matrix[i].size() >2){   //Check if matrix is multi-variable
-        var_matrix[i][2] = area;
-        price_matrix[i][0] = data.w_intercept + (data.w_bedroom * bedroom) + (data.w_area * area);
+        if (X[i].size() >2){   //Check if matrix is multi-variable
+        X[i][2] = area;
+        Y[i][0] = data.w_intercept + (data.w_bedroom * bedroom) + (data.w_area * area);
 
         }
         //Single Variable Calculations
         else {
-        price_matrix[i][0] = data.w_intercept + (data.w_bedroom * bedroom);  }
+        Y[i][0] = data.w_intercept + (data.w_bedroom * bedroom);  }
         
     }
 }
 
 // ADD NOISE TO INDIVIDUAL POINT
-void DataGenerator::calc_noise(std::vector<std::vector<double>>& price_matrix){ // Pass by reference alters original dataset
+void DataGenerator::calc_noise(std::vector<std::vector<double>>& Y){ // Pass by reference alters original dataset
     double current_sum = 0;
-    for (int i=0; i<price_matrix.size(); i++){
-        double indiv_dev = price_matrix[i][0] * 0.05;   // Calc standard deviation for each point to apply noise
+    for (int i=0; i<Y.size(); i++){
+        double indiv_dev = Y[i][0] * 0.1;   // Calc standard deviation for each point to apply noise
         // Gaussian White Noise
         std::normal_distribution<double> noise_dist(0.0, indiv_dev);
         double noise = noise_dist(mt_num);  
-        price_matrix[i][0]+= noise;
+        Y[i][0]+= noise;
     }
 }
 

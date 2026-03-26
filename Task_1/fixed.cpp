@@ -1,6 +1,9 @@
-# include <iostream>
-# include <cmath>
-# include <limits>
+// g++ fiex -o"fixed.exe"
+// Copy and paste above command into terminal to compile
+
+#include <iostream>
+#include <cmath>
+#include <limits>
 using namespace std;
 
 // Mathematical iteration fuction g(x)

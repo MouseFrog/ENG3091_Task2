@@ -1,3 +1,6 @@
+// g++ TTT.cpp -o"TTT.exe"
+// Copy and paste above command into terminal to compile
+
 #include <iostream>
 #include <random>
 
