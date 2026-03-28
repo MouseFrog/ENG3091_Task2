@@ -1,4 +1,4 @@
-// g++ fiex -o"fixed.exe"
+// g++ fixed -o"fixed.exe"
 // Copy and paste above command into terminal to compile
 
 #include <iostream>

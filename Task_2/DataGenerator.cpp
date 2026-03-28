@@ -6,7 +6,7 @@ DataGenerator::DataGenerator(Dataset c, std::mt19937& global_num) : data(c), mt_
     }
 
 // MAIN MATRIX GENERATOR 
-// Resize populate matrix with values
+// Resize and populate matrix with values
 Matrices DataGenerator::make_matrix(int sample_size, int num_features){    // Input # features and # data points
         Matrices matrix; 
 
@@ -62,7 +62,7 @@ void DataGenerator::generate_data(std::vector<std::vector<double>>& X,
 void DataGenerator::calc_noise(std::vector<std::vector<double>>& Y){ // Pass by reference alters original dataset
     double current_sum = 0;
     for (int i=0; i<Y.size(); i++){
-        double indiv_dev = Y[i][0] * 0.1;   // Calc standard deviation for each point to apply noise
+        double indiv_dev = Y[i][0] * data.noise_dev;   // Calc percentage of indiv point as standard deviation for noise
         // Gaussian White Noise
         std::normal_distribution<double> noise_dist(0.0, indiv_dev);
         double noise = noise_dist(mt_num);  

@@ -46,18 +46,18 @@ void GradientDescent::train(const std::vector<std::vector<double>>& X,
         // Update weights using average gradient
         // Takes one step size away from calculated error
         for (int j = 0; j < n; j++) {
-            weights[j] -= (learningRate * gradients[j]) * (1.0/m);    // 2.0 to force floating pt. calculations
+            weights[j] -= (learningRate * gradients[j]) * (1.0/m);    // 1.0 to force floating pt. calculations
         }
 
         // Track magnitude of change between old and new weights
         double overall_change = 0.0;
         for (int j = 0; j < n; j++){
             double weight_change = old_weights[j]-weights[j];
-            overall_change +=  weight_change * weight_change;
+            overall_change +=  weight_change * weight_change; // Total sum of square error
         }
         
-        overall_change = std::sqrt(overall_change);
-        if (overall_change < converge_threshold){
+        overall_change = std::sqrt(overall_change);     // Final value used as measure of change
+        if (overall_change < converge_threshold){   // Value stabilised
             std::cout<<"Iteration complete: "<< e <<"\n";
             break;
         }

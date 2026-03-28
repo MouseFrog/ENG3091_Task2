@@ -17,8 +17,12 @@ struct Dataset {
     double area_max{1000.0};
     // Weights of variables
     double w_intercept{50000.0}; 
-    double w_bedroom ={50000.0};
-    double w_area ={1600.0};
+    double w_bedroom {50000.0};
+    double w_area {1600.0};
+
+    // Percentage of price used as standard deviation for adding Gaussian noise
+    // Change to 0 to verify math is working
+    double noise_dev {0.1};
 };
 
 // Used to create matrix instances

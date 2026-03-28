@@ -33,7 +33,11 @@ int main() {
     grad_model.train(norm_X.matrix,multiMatrix.Y,num_iterations);
 
     // Normalised weights
+    // Weights[0] = Intercept
+    // Weights[1] = Bedroom
+    // Weights[2] = Area    
     std::vector<double> model_weights = grad_model.getWeights();   
+
 
     // De-normalise results
     // real weight = normalised weight/standard deviation
@@ -64,7 +68,6 @@ int main() {
     */
 
     saveFile(multiMatrix.X,multiMatrix.Y,"MultiVariableData");
-
 
     return 0;
 }    
