@@ -55,7 +55,8 @@ int main() {
     // real intercept = normalised intercept - sum of (variable real weights * variable mean values)
     double real_intercept = grad_weights[0]-(real_gradient * norm_data.means[1]);
 
-
+    /*
+    //Debugging
     std::cout <<
     "Gradient Descent Intercept: "<<real_intercept<<"\n"<<
     "Gradient Descent Gradient: "<<real_gradient<<"\n";
@@ -63,6 +64,7 @@ int main() {
     std::cout<<
     "Intercept std_dev: "<<norm_data.std_devs[0]<<"\n"<<
     "Bedroom std_dev: "<<norm_data.std_devs[1]<<"\n";
+    */
 
     saveFile(singleMatrix.X,singleMatrix.Y,"SingleVariableData" );
 
