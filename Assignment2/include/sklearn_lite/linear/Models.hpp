@@ -5,6 +5,8 @@
 
 #include <iostream>
 #include <vector>   
+#include <fstream>  // File operations
+
 
 // Function to read csv file here
 
@@ -22,13 +24,13 @@ class Models {
 
     protected:
     
-    double lr {}; // Update rule parameter required for all models
+    double lr {}; // Update rule parameter required for all models, learning rate
     int num_features {};
     std::vector<std::vector<double>> weights {}; // Store calculated weights and biases
 
     public:
     Models(double lr, int num_features, const std::vector<std::vector<double>>& X, const std::vector<std::vector<double>>& Y) 
-    : num_features{num_features}, lr{lr}, X{X}, Y{Y} 
+    : lr{lr}, num_features{num_features}, X{X}, Y{Y} 
     {
         weights.resize(num_features+1, 0.0);
     }
@@ -49,7 +51,7 @@ class Models {
 };
 } 
 
-// Linear Regression Model, Gradient Descent
+// Linear Regression Model
 namespace sklearn_lite::linear {
 class LinearRegression : public Models {
 

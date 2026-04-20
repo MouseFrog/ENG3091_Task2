@@ -5,14 +5,18 @@
 #include <vector>   // for std::vector
 #include "Models.hpp"
 
+// Linear Regression Model
 namespace sklearn_lite::linear {
+class LinearRegression : public Models {
 
-class LinearRegression {
+    private:
 
+    public:
+    LinearRegression():{}
 
    
 };
-
 } 
+
 
 #endif 
