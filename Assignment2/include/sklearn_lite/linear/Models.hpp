@@ -1,8 +1,8 @@
 // Base class for all regression models in the sklearn-lite library
 // LinearRegression, Logistic, BinaryLogistic, and MultiLogistic all inherit from Model
 // Provides shared Member variables and functions common to all models 
-
 // Binary and Multi-class inherit from Logistic model --> Binary is reduced version of Multi-class
+
 #ifndef SKLEARN_LITE_MODELS_HPP
 #define SKLEARN_LITE_MODELS_HPP
 
@@ -99,14 +99,98 @@ class Models {
     // Constructor sets learning rate and iterations
     Models(double lr, int iterations) 
          : lr{lr}, iterations{iterations} {}
-
+    // Returns the learned weights after training 
     const std::vector<double>& get_weights() const {
         return weights;
     }
 };
-}
+
+
+
+// LOGISTIC base class 
+// Binary and Multi-class inherit from Logistic
+// Contains softmax which works for both binary and multi-class cases
+// Binary ECG uses it with k = 2, Multi-class MNIST uses it with k = 10
+class Logistic : public Models{
+
+    protected:
+        double reg_strength; // Regularisation strength lamda 
+                            // Used to stop wieghts from gettiing too large 
+        
+        // Converts raw scores into probabilities between 0 and 1
+        std::vector<double> softmax(const std::vector<double>& z) const {
+                     
+            std::vector<double> probs(z.size());
+
+            // Substract the largest score first so exp() doesnt become too large 
+            double max_z = *std::max_element(z.begin(), z.end());
+
+            // Apply e^(score - max) to every score
+            double sum = 0.0;
+            for (int i = 0; i < (int)z.size(); i++) {
+                probs[i] = std::exp(z[i] - max_z);
+                sum += probs[i];
+            }
+
+            // Divide each value by the total to get probabilities
+            for (int i = 0; i < (int)z.size(); i++) {
+                probs[i] /= sum;
+            }
+
+            return probs;
+        }
+
+    public:
+
+        // Constructor passes learning rate and iterations to the base class
+        // Also stores the regularisation strength for logistic regression
+        Logistic(double lr, int iterations, double reg_strength)
+            : Models{lr, iterations}, reg_strength{reg_strength} {}
+
+ };
 
  
+ 
+ // BINARY Logistic Regression
+ // Used for ECG classification (sick = 0, healthy = 1)
+ // Calls softmax with k = 2, which simplifies to sigmoid function
+class BinaryLogistic : public Logistic {
+    
+    public:
+        BinaryLogistic(double lr, int iterations, double reg_strength)
+            : Logistic{lr, iterations, reg_strength} {}
+
+            // fit() function to train model
+            // predict()
+
+
+
+};           
+
+
+// MULTI-class Logistic Regression
+// Used for MNIST classification (digits 0-9)
+// Calls softmax with k = 10 
+class MultiLogistic : public Logistic {
+    
+    public:
+        MultiLogistic(double lr, int iterations, double reg_strength)
+            : Logistic{lr, iterations, reg_strength} {}
+
+            // fit() function to train model
+            // predict()
+
+
+};
+
+} 
+
+#endif
+        
+
+
+
+
     // Function to access weights and biases common across all models
    // const std::vector<std::vector<double>>& get_weights() const{ //return by reference (large matrices), const to protect object
         //return weights;
@@ -213,4 +297,3 @@ class Models {
 
 
 
-#endif 
