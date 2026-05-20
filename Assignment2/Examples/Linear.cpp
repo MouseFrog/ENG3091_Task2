@@ -1,73 +1,43 @@
-// This file contains the implementation of the Gradient Descent method
-/*
-Experiment with different learning rates 𝛼 and regularization strengths 𝜆 to see how they
-affect the training process and the final performance of the model.
-*/
+// Compile: main.cpp -o main.out
+// Run: ./main.out
 
-#include "MultiRegression.hpp"
+// Runs the full linear regression pipeline on the concrete dataset
+// Loads the data, normalises it, trains the model, and checks performance
+// Expected R2 is around 0.61 (same as Python sklearn)
 
-GradientDescent::GradientDescent(int numFeatures, double lr ) : learningRate(lr) {    
-        // Vector size: # of variables + Intercept 
-        // Resized within constructor so it isn't altered accidentally, causing size mismatch 
-        weights.resize(numFeatures + 1, 0.0); 
-    }
+#include <iostream>
+#include <vector>
+#include "../include/sklearn_lite/linear_models/LinearRegression.hpp"
+#include "../include/sklearn_lite/Utils.hpp"
 
-void GradientDescent::train(const std::vector<std::vector<double>>& X, 
-                            const std::vector<std::vector<double>>& Y, 
-                            int iteration) {
+int main() {
 
-    int m = X.size();    // Number of samples, row
-    int n = X[0].size(); // # of weights including intercept, col
+    // Set up containers for the data
+    // X will store the input features, y will store the target values
+    std::vector<std::vector<double>> X; 
+    std::vector<double> y;
 
-    for (int e = 0; e < iteration; e++) {  // # of iterations
+    // Load the dataset from file into X and y, skip header
+    sklearn_lite::readCSV("../data/concrete.csv", X, y, true);
 
-        // Value beyond which change is negligible
-        double converge_threshold = 1*10e-12;
+    // Prep & normalise feature values for training
+    std::vector<std::vector<double>> norm = sklearn_lite::normaliseData(X);
 
-        // Gradient vector to store error in each data point
-        // Reset every iteration
-        std::vector<double> gradients(n, 0.0);  
+    // Instantiate the model with chosen learning parameters
+    sklearn_lite::linear::LinearRegression model(0.1, 10000);
 
-        // Store current weights to compare change in weights for this iteration
-        std::vector<double> old_weights = weights;
+    // Train the model using the normalised data
+    model.fit(norm, y);
 
-        for (int i = 0; i < m; i++) {
+    // Use the trained model to make predictions
+    std::vector<double> predictions = model.predict(norm);
 
-            double y_prediction{0};
+    // Check how good the predictions are
+    double r2 = model.r2_score(y, predictions);
 
-            for (int j = 0; j < n; j++) {
-                y_prediction += weights[j] * X[i][j]; // Summation of weight * x-value for all variables 
-            }
+    // Print the result and compare to expected value
+    std::cout << "R2 Score: " << r2 << "\n";
+    std::cout << "Python sklearn benchmark: ~0.61\n";
 
-            // Discrepancy in y value prediction
-            double error = y_prediction - Y[i][0];  
-
-            for (int j = 0; j < n; j++) {
-                gradients[j] += error * X[i][j]; // Calculate errors proportional to each data point
-            }
-        }
-
-        // Update weights using average gradient
-        // Takes one step size away from calculated error
-        for (int j = 0; j < n; j++) {
-            weights[j] -= learningRate * gradients[j] * (1.0/m);    // 1.0 to force floating pt. calculations
-        }
-
-        // Track magnitude of change between old and new weights
-        double overall_change = 0.0;
-        for (int j = 0; j < n; j++){
-            double weight_change = old_weights[j]-weights[j];
-            overall_change +=  weight_change * weight_change; // Total sum of square error
-        }
-        
-        overall_change = std::sqrt(overall_change);     // Final value used as measure of change
-        if (overall_change < converge_threshold){   // Value stabilised
-            std::cout<<"Iteration complete: "<< e <<"\n";
-            break;
-        }
-    }
-}
-
-std::vector<double> GradientDescent::getWeights() const { 
-    return weights; 
+    return 0;
 }

@@ -21,7 +21,7 @@ void readCSV(const std::string& filename,
     // Try to open the file
     std::ifstream file(filename);
 
-    // If it didn't open, stop here
+    // If it didn't open, raise error
     if (!file.is_open()) {
         std::cerr << "Could not open file: " << filename << "\n";
         return;
@@ -37,21 +37,21 @@ void readCSV(const std::string& filename,
     // Go through each line in the file
     while (std::getline(file, line)) {
 
-        // Turn the line into something we can split by commas
-        std::stringstream ss(line);
+        // Wrap string in object stream to extract data
+        std::stringstream stream(line);
         std::string value;
         std::vector<double> row;
 
-        // Read values one by one, split by comma
-        // Convert each value from string to double
-        while (std::getline(ss, value, ',')) {
+        // Read comma separated values
+        // Convert each value from string to double using std::stod
+        while (std::getline(stream, value, ',')) {
             row.push_back(std::stod(value));
         }
 
         // Skip empty rows just in case
         if (row.empty()) continue;
 
-        // Last value is always the label (y)
+        // Appaend last value (label(y)) to vector
         y.push_back(row.back());
 
         // Remove the label so only features are left
