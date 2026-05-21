@@ -1,7 +1,7 @@
 // Compile: g++ Binary.cpp -o binary.out
 // Run: ./binary.out
 
-// Runs the full Multi-class Logistic Regression method on Handwritten Numbers dataset
+// Runs the full Binary Logistic Regression method on Handwritten Numbers dataset
 // Loads and normalises data, trains model, and checks performance
 // Average Accuracy ~98%
 

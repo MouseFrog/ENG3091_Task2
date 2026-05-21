@@ -1,5 +1,5 @@
 // Linear Regression model using gradient descent
-// Inherits shared variables and functions from Models base class 
+// Inherits shared variables and functions from BaseModel base class 
 // Adapted from Assignment 1 GradientDescent class 
 
 

@@ -3,7 +3,9 @@
 
 // Runs the full Multi-class Logistic Regression method on Handwritten Numbers dataset
 // Loads and normalises data, trains model, and checks performance
-// Average Accuracy ~94%
+// Accuracy ~94% at max.iteration 200
+// Accuracy ~95% at max.iteratoion 300, but takes longer so value is set at 200
+
 
 #include <iostream>
 #include <vector>
@@ -17,13 +19,15 @@ int main() {
     std::vector<double> labels {};
 
     // Load the dataset from file into X and y, skip header
-    sklearn_lite::readCSV("../data/mnist_micro.csv", features, labels, false);
+    sklearn_lite::readCSV("../data/mnist_mini.csv", features, labels, false);
+    // Run at your own risk: we're not able to run fullset due to sheer size (yet)
+    // sklearn_lite::readCSV("../data/mnist_full.csv", features, labels, false);
 
     // Prep & normalise feature values for training
     std::vector<std::vector<double>> norm_features {sklearn_lite::normaliseData(features)};
 
     // Instantiate the model with chosen learning parameters
-    sklearn_lite::linear_models::LogisticRegression Multiclass(0.1, 200, 0.01);
+    sklearn_lite::linear_models::LogisticRegression Multiclass(0.1, 500, 0.01);
 
     // Train the model using the normalised data
     Multiclass.fit(norm_features, labels);
@@ -36,3 +40,5 @@ int main() {
 
     return 0;
 }
+
+//git add -- . ':!*.csv' (upload without large csv files)

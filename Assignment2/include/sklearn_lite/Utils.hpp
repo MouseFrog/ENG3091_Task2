@@ -71,7 +71,7 @@ inline std::vector<std::vector<double>> normaliseData (const std::vector<std::ve
     return result; // scaled data values
 };
 
-// CSV READIND function
+// CSV READING function
 // For concrete.csv, has_header = true
 // For ECG and MNIST, has_header = false
 inline void readCSV(const std::string& filename,

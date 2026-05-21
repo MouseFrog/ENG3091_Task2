@@ -234,7 +234,7 @@ public:
         
         weights.resize(num_classes, std::vector<double>(num_features, 0.0)); // Weights allocated to every feature for every class [num_classes][num_features]
 
-        double converge_threshold {1e-12}; // Threshold value for meaningful change in weights between each interation
+        double converge_threshold {1e-4}; // Threshold value for meaningful change in weights between each interation
         std::vector<std::vector<double>> old_weights(num_classes, std::vector<double>(num_features, 0.0)); // Weights from previous iteration to track change
         
         for (int e{0}; e < iterations; e++) { // Repeat until convergence or max iteration value
