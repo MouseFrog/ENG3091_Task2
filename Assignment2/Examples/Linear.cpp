@@ -1,5 +1,5 @@
-// Compile: g++ main.cpp -o main.out
-// Run: ./main.out
+// Compile: g++ Linear.cpp -o linear.out
+// Run: ./linear.out
 
 // Runs the full linear regression pipeline on the concrete dataset
 // Loads the data, normalises it, trains the model, and checks performance
