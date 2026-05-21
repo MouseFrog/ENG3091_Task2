@@ -14,7 +14,7 @@
 
 
 // BASE CLASS for all models
-namespace sklearn_lite::linear {
+namespace sklearn_lite::linear_models {
 class BaseModel {
 
     public:

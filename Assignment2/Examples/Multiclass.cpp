@@ -23,7 +23,7 @@ int main() {
     std::vector<std::vector<double>> norm_features {sklearn_lite::normaliseData(features)};
 
     // Instantiate the model with chosen learning parameters
-    sklearn_lite::linear::LogisticRegression Multiclass(0.1, 200, 0.01);
+    sklearn_lite::linear_models::LogisticRegression Multiclass(0.1, 200, 0.01);
 
     // Train the model using the normalised data
     Multiclass.fit(norm_features, labels);

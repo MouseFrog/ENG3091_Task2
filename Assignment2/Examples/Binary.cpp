@@ -25,7 +25,7 @@ int main() {
     std::vector<std::vector<double>> norm_features {sklearn_lite::normaliseData(features)};
 
     // Instantiate the model with chosen learning parameters
-    sklearn_lite::linear::LogisticRegression Binary(0.1, 10000, 0.1);
+    sklearn_lite::linear_models::LogisticRegression Binary(0.1, 10000, 0.1);
 
     // Train the model using the normalised data
     Binary.fit(norm_features, labels);

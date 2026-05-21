@@ -19,7 +19,7 @@
 #include <memory>        // for std::unique_ptr and std::make_unique
 #include "BaseModel.hpp"
 
-namespace sklearn_lite::linear {
+namespace sklearn_lite::linear_models {
 
 
 // LOGISTIC MODEL

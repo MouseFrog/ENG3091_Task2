@@ -11,7 +11,7 @@
 #include <cmath>      // std::sqrt, std::pow
 #include "BaseModel.hpp"
 
-namespace sklearn_lite::linear {
+namespace sklearn_lite::linear_models {
 
 class LinearRegression : public BaseModel {
 
