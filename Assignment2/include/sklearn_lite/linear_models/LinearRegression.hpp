@@ -35,64 +35,52 @@ class LinearRegression : public BaseModel {
         void fit(const std::vector<std::vector<double>>& X,
                  const std::vector<double>& y) override
         {
-            int num_samples = X.size();    // rows
-            int num_features = X[0].size(); // Number of weights including intercept, cols
+            int num_samples {static_cast<int>(X.size())};    // rows
+            int num_features {static_cast<int>(X[0].size())}; // Number of weights including intercept, cols
 
-            // Resize weights to correspond with number of features+1, weights[0] helps calculate intercept 
+            // Resize weights to correspond with number of features+1, weights[0] holds intercept values
             weights.resize(num_features, 0.0);
 
-            // Threshold value beyond which change is negligible, stop early
-            double converge_threshold = 1e-12;
+            double converge_threshold {1e-12}; // Threshold value beyond which change is negligible, stop early
 
-            // Vector to save weights from previous iteration to track how much it changed
-            std::vector<double> old_weights(num_features, 0.0);
+            std::vector<double> old_weights(num_features, 0.0); // Help track change in weights
 
-            // Repeat the gradient descent update until we either converge or hit the maximum number of iterations
-            for (int e{0}; e < iterations; e++) {
+            for (int e{0}; e < iterations; e++) { // Repeat until convergence or max iteration value
 
-                // Save previous iteration's weights into old_weights before updating weights vector 
-                old_weights = weights;
+                old_weights = weights; // Save weights from previous iteration
 
-                // Store gradient (rate of change necessary) for each weight during this iteration
-                // Reset to 0 at the start of every pass through the data
-                std::vector<double> gradients(num_features, 0.0);
+                // Store gradient (rate of change necessary) 
+                std::vector<double> gradients(num_features, 0.0); // Resets to 0 at every pass
 
-                // Loop through each training sample
-                for (int i{0}; i < num_samples; i++) {
+                for (int i{0}; i < num_samples; i++) { // Loop through each training sample
 
-                    // Calculate the predicted strength for this sample
-                    // Sum of weight * feature value across all features
-                    double y_prediction {0};
+                    // 1. Calculate the predicted strength for this sample
+                    double y_prediction {0.0}; 
                     for (int j{0}; j < num_features; j++) {
                         y_prediction += weights[j] * X[i][j]; // weight * feature value
                     }
+                    double error{y_prediction - y[i]}; // Error in prediction vs actual value
 
-                    // Work out how far the prediction is from the actual value
-                    double error{y_prediction - y[i]};
-
-                    // Add this sample's contribution to each gradient
-                    // Gradient for each weight = error * its corresponding feature value
+                    // 2. Calculate rate of change per sample necessary based on error
                     for (int j{0}; j < num_features; j++) {
-                        gradients[j] += error * X[i][j];
+                        gradients[j] += error * X[i][j]; // Error atttributed to each feature
                     }
                 }
 
-                // Update each weight using the average gradient across all samples
+                // 3. Update rule
                 for (int j{0}; j < num_features; j++) {
                     weights[j] -= lr * gradients[j] * (1.0 / num_samples);
                 }
 
-                // Measure how much the weights changed overall in this iteration
-                double overall_change{0};
+                // 4. Track net change in weights in this iteration
+                double overall_change{0.0};
                 for (int j{0}; j < num_features; j++) {
                     double weight_change {old_weights[j] - weights[j]};
                     overall_change += weight_change * weight_change;  // Sum the squared change for each weight
                 }
                 overall_change = std::sqrt(overall_change); // Magnitude of total change, taking sqrt
-
-                // If weights have stabilised, stop training early
-                if (overall_change < converge_threshold) {
-                    std::cout << "Converged at iteration: " << e << "\n";
+                if (overall_change < converge_threshold) { // If change in weights has stabilised, stop training early
+                    std::cout << "Converged at iteration: " << e << "\n"; // save energy, save time
                     break;
                 }
             }
@@ -109,14 +97,16 @@ class LinearRegression : public BaseModel {
                 return {};
             }
 
-            std::vector<double> predictions;
+            int num_samples {static_cast<int>(X.size())};
+            int num_classes {static_cast<int>(weights.size())};
+            std::vector<double> predictions {}; // Final class predictions
 
             // Calculate prediction per sample (row)
-            for (int i{0}; i < (int)X.size(); i++) {
+            for (int i{0}; i < num_samples ; i++) {
 
                 // Same dot product as in fit(): sum of weight * feature for all features
-                double y_hat{0};
-                for (int j{0}; j < (int)weights.size(); j++) {
+                double y_hat{0.0};
+                for (int j{0}; j < num_classes; j++) {
                     y_hat += weights[j] * X[i][j]; 
                 }
 

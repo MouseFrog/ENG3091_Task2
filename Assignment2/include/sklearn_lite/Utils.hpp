@@ -10,85 +10,84 @@
 
 namespace sklearn_lite {
 
-// Normalisation function for all three datasets 
-// User can pass means and std_dev vector by reference for debugging 
-inline std::vector<std::vector<double>> normaliseData (const std::vector<std::vector<double>>& X){
+// NORMALISATION Function : ensure features are on a similar scale/ magnitude,
+//                          allows error to be fairly "distributed" amongst features 
+// IMPORTANT: adds a bias column to the feature matrix to simplify future matrix calculations 
+inline std::vector<std::vector<double>> normaliseData (const std::vector<std::vector<double>>& dataset){
 
-    int rows = X.size(); // Number of rows
-    int cols = X[0].size() + 1; // Number of columns (including bias term)
+    int num_samples {static_cast<int>(dataset.size())}; // Number of rows
+    int num_features {static_cast<int>(dataset[0].size() + 1)}; // Number of columns (including bias term)
 
-    // Initialise matrix
-    std::vector<std::vector<double>> result (rows, std::vector<double>(cols,0.0));
-    // Set first column to 1 for bias term
-    for (int i{0}; i < rows; i++) {
+    // Initialise matrix and set entire first column to 1 for bias calculations
+    std::vector<std::vector<double>> result (num_samples, std::vector<double>(num_features,0.0));
+    for (int i{0}; i < num_samples; i++) {
         result[i][0] = 1.0; 
     }
 
-    // z-normal: stddev =1, mean=0
+    // z-normalisation: stddev =1, mean=0
+    // Means and Standard Deviations are returned by function, but is kept for good practice/ incase of bugs
     std::vector<double> means{};
     std::vector<double> std_devs{};
     means.push_back(0.0); 
     std_devs.push_back(1.0);
 
     // Loop through each column (starting 1 to skip bias term)
-       for (int j{1}; j < cols; j++) {
+    for (int j{1}; j < num_features; j++) {
 
-        // Add up all values in this feature column
-        double value_sum = 0.0;
-        for (int i{0}; i < rows; i++) {
-            value_sum += X[i][j - 1]; // j-1 to account for skipped index
+        // 1. Add up all values in current feature column
+        double value_sum {0.0};
+        for (int i{0}; i < num_samples; i++) {
+            value_sum += dataset[i][j - 1]; // j-1 to account for skipped index
         }
 
-        // Divide by number of samples to get mean 
-        double mean {value_sum / rows};
+        // 2. Calculate mean and append to means vector
+        double mean {value_sum / num_samples}; // mean = sum of current feature values / # of samples
         means.push_back(mean);
 
-        // Squared erorr sum to measure spread around mean
+        // 3. Squared erorr sum to measure spread around mean
         double error_sum{0.0};
-        for (int i{0}; i < rows; i++) {
-            error_sum += std::pow((X[i][j - 1] - mean), 2); 
+        for (int i{0}; i < num_samples; i++) {
+            error_sum += std::pow((dataset[i][j - 1] - mean), 2); 
         } 
-    
-        double std_dev {std::sqrt(error_sum / rows)};
+
+        // 4. Calculate standard deviatiom and append to std_dev vector
+        double std_dev {std::sqrt(error_sum / num_samples)}; // std_dev = magnitude of error/ # of samples
         std_devs.push_back(std_dev);
 
-        // If std_dev = 0, all values in this column are identical
-        // Bypass equation and set values to 0
-        if (std_dev == 0) {
-            for (int i{0}; i < rows; i++) {
+        // 5. Calculate normalised values
+        // Special case: std_dev = 0 means values are all identical, by pass and set value to 0
+        // Eqn involves dividing by std_dev, cannot divide by 0
+        if (std_dev == 0) { 
+            for (int i{0}; i < num_samples; i++) {
                 result[i][j] = 0.0;
             }
         }
-        // Shifts values so mean becomes 0, scales so spread becomes 1
         else {
-            for (int i{0}; i < rows; i++) {
-                result[i][j] = (X[i][j - 1] - mean) / std_dev;
+            for (int i{0}; i < num_samples; i++) {
+                result[i][j] = (dataset[i][j - 1] - mean) / std_dev;
             }
         }
     }
     return result; // scaled data values
 };
 
-
-// has_header defaults to true since concrete.csv is used first
-// For ECG and MNIST, we pass false so we don't skip the first row
+// CSV READIND function
+// For concrete.csv, has_header = true
+// For ECG and MNIST, has_header = false
 inline void readCSV(const std::string& filename,
-                    std::vector<std::vector<double>>& X,
-                    std::vector<double>& y,
+                    std::vector<std::vector<double>>& features,
+                    std::vector<double>& labels,
                     bool has_header = true) // skip first line if has_header
 {
-    // Try to open the file
-    std::ifstream file(filename);
+    std::ifstream file(filename); //Try open file
 
-    // If it didn't open, raise error
-    if (!file.is_open()) {
+    if (!file.is_open()) { // If it didn't open, raise error
         std::cerr << "Could not open file: " << filename << "\n";
         return;
     }
     std::string line{};
 
-    // Skip first line only if it's a header
-    if (has_header) {
+    if (has_header) { // Skip first line if there is a header
         std::getline(file, line);
     }
 
@@ -98,46 +97,39 @@ inline void readCSV(const std::string& filename,
         // Wrap string in object stream to extract data
         std::stringstream stream(line);
         std::string value;
-        std::vector<double> row;
+        std::vector<double> row {};
 
-        // Read comma separated values
-        // Convert each value from string to double using std::stod
-        while (std::getline(stream, value, ',')) {
-            row.push_back(std::stod(value));
+        while (std::getline(stream, value, ',')) { // Read comma separated values
+            row.push_back(std::stod(value)); // Convert each value from string to double using std::stod
         }
 
-        // Skip empty rows just in case
-        if (row.empty()) continue;
+        if (row.empty()) continue; // Skip empty rows just in case
 
-        // Appaend last value (label(y)) to vector
-        y.push_back(row.back());
+        labels.push_back(row.back()); // Appaend last value, y label, to label vector
 
-        // Remove the label(y) so only features are left
-        row.pop_back();
+        row.pop_back(); // Remove the label(y) so only features are left
 
-        // Store the feature row in X
-        X.push_back(row);
+        features.push_back(row); // Store the feature row in X
     }
 
     file.close();
 
-    // Just to confirm how many rows we loaded
-    std::cout << "Loaded " << X.size() << " samples from " << filename << "\n";
+    // Check how many rows we loaded
+    std::cout << "Loaded " << features.size() << " samples from " << filename << std::endl;
 }
 
+// CSV SAVING function
+// Side-by-side comparison of prediction and actual data
 inline void saveCSV(const std::vector<double>& actual, const std::vector<double>& predictions, const std::string& filename) {
     
-    // Try to open the file
     std::ofstream file(filename);
     
-    // Raise error if files is unable to open
-    if (!file.is_open()) {
+    if (!file.is_open()) { // Raise error if files is unable to open
         std::cerr << "Error: Could not open file " << filename << " for writing.\n";
         return;
     }
 
-    // Input column headers separated by comma
-    file << "Actual,Prediction\n";
+    file << "Actual,Prediction\n"; // Headers for clarity
 
     // Input given labels and predicted labels
     for (int i{0}; i < predictions.size(); ++i) {
@@ -145,14 +137,15 @@ inline void saveCSV(const std::vector<double>& actual, const std::vector<double>
     }
 
     file.close();
-    std::cout << "Successfully saved results to " << filename << "\n";
+    std::cout << "Successfully saved results to " << filename << std::endl;
 }
 
+// ACCURACY CHECK function
+// Provides ratio and percentage of correct predictions to test best parameters
 inline void check_accuracy(const std::vector<double>& actual, const std::vector<double>& predictions) {
 
-    // Dimension mismatch in input data vectors
-    if (actual.size() != predictions.size()) {
-        std::cerr << "Error: Vector sizes do not match. Cannot check for accuracy.\n";
+    if (actual.size() != predictions.size()) { // Dimension mismatch in input data vectors, cannot proceed
+        std::cerr << "Error: Vector sizes do not match. Cannot check for accuracy."<< std::endl;
         return;
     }
 
@@ -169,7 +162,7 @@ inline void check_accuracy(const std::vector<double>& actual, const std::vector<
     double accuracy {(static_cast<double>(correct_counts) * 100.0) / static_cast<double>(total_samples)};
 
     std::cout << "Correct Predictions: " << correct_counts << " / " << total_samples << "\n";
-    std::cout << "Accuracy Rate:       " << accuracy << "%\n";
+    std::cout << "Accuracy Rate: " << accuracy << "%"<< std::endl;
 }
 
 

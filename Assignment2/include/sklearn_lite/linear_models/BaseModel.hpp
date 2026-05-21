@@ -25,8 +25,7 @@ class BaseModel {
     virtual void fit(const std::vector<std::vector<double>>& X,const std::vector<double>& y) = 0;  
     virtual std::vector<double> predict(const std::vector<std::vector<double>>& X) const = 0;
 
-    // Virtual destructor
-    ~BaseModel() = default;
+    virtual ~BaseModel() = default;// virtual destructor so the proper derived destructor is called
 };
 
 }; // namespace linear
