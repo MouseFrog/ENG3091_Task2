@@ -1,4 +1,4 @@
-// Compile: Binary.cpp -o binary.out
+// Compile: g++ Binary.cpp -o binary.out
 // Run: ./binary.out
 
 // Runs the full Multi-class Logistic Regression method on Handwritten Numbers dataset
@@ -15,26 +15,26 @@ int main() {
 
     // Set up containers for the data
     // X will store the input features, y will store the target values
-    std::vector<std::vector<double>> X; 
-    std::vector<double> y;
+    std::vector<std::vector<double>> features {}; 
+    std::vector<double> labels {};
 
     // Load the dataset from file into X and y, skip header
-    sklearn_lite::readCSV("../data/ecg.csv", X, y, true);
+    sklearn_lite::readCSV("../data/ecg.csv", features, labels, false);
 
     // Prep & normalise feature values for training
-    std::vector<std::vector<double>> norm = sklearn_lite::normaliseData(X);
+    std::vector<std::vector<double>> norm_features {sklearn_lite::normaliseData(features)};
 
     // Instantiate the model with chosen learning parameters
     sklearn_lite::linear::LogisticRegression Binary(0.1, 10000, 0.1);
 
     // Train the model using the normalised data
-    Binary.fit(norm, y);
+    Binary.fit(norm_features, labels);
 
     // Use the trained model to make predictions
-    std::vector<double> predictions = Binary.predict(norm);
+    std::vector<double> predictions {Binary.predict(norm_features)};
 
-    sklearn_lite::saveCSV(y, predictions, "Binary_Predictions.csv");
-    sklearn_lite::check_accuracy(y, predictions);
+    sklearn_lite::saveCSV(labels, predictions, "Binary_Predictions.csv");
+    sklearn_lite::check_accuracy(labels, predictions);
 
     return 0;
 }
