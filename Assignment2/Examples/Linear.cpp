@@ -22,7 +22,7 @@ Design choices and core algorithm logic were manually tested and verified by us.
 
 #include <iostream>
 #include <vector>
-#include "sklearn_lite.hpp"``
+#include "sklearn_lite.hpp"
 
 int main() {
 

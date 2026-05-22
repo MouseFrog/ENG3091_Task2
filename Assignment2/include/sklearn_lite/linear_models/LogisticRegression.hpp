@@ -101,7 +101,7 @@ class Binary : public LogisticModel {
             int num_samples {static_cast<int>(features.size())}; // rows
             int num_features {static_cast<int>(features[0].size())}; // cols
 
-            weights.resize(num_features, 0.0); // Prep weights vector element for every feature
+            weights.resize(num_features, 0.0); // Prep weights vector element for every feature + intercept
 
             double converge_threshold {1e-12}; // Threshold value for meaningful change in weights between each interation
             std::vector<double> old_weights(num_features,0.0); // Comtainer for previous iteration's weights to track change per iteration
@@ -248,11 +248,8 @@ public:
         weights.resize(num_classes, std::vector<double>(num_features, 0.0)); // Weights allocated to every feature for every class [num_classes][num_features]
 
         // Convergence Threshold: change in weights beyond which is negligible
-        // MINI/MICRO dataset setting:
-        double converge_threshold {1e-6};   //set to >=1e-6, @ 1e-6: ~92% accuracy, @ 1e-7: ~96% accuracy; >= 1e-8 takes more than 1000 iterations, too long
-        // FULL dataset setting:
-        // double converge_threshold {1e-5};    // @ 1e-5 ~83% accuracy. Try >1e-5 if you have faith in computer
-                                        
+        double converge_threshold {1e-7};  
+                       
         std::vector<std::vector<double>> old_weights(num_classes, std::vector<double>(num_features, 0.0)); // Weights from previous iteration to track change
         
         for (int e{0}; e < iterations; e++) { // Repeat until convergence or max iteration value

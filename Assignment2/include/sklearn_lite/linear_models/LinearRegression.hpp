@@ -96,7 +96,7 @@ class LinearRegression : public BaseModel {
 
             int num_samples {static_cast<int>(X.size())};
             int num_features {static_cast<int>(weights.size())};
-            std::vector<double> predictions {}; // Final value predictions
+            std::vector<double> predictions (num_samples,0.0); // Final value predictions
 
             // Calculate prediction per sample (row)
             for (int i{0}; i < num_samples ; i++) {
@@ -106,7 +106,7 @@ class LinearRegression : public BaseModel {
                 for (int j{0}; j < num_features; j++) {
                     y_hat += weights[j] * X[i][j]; 
                 }
-                predictions.push_back(y_hat);
+                predictions[i] = y_hat;
             }
 
             return predictions;
