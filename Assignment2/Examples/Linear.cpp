@@ -1,6 +1,7 @@
-// https://github.com/MouseFrog/ENG3091.git
-/*
-Generative AI Acknowledgement
+/* 
+REPO LINK: https://github.com/MouseFrog/ENG3091.git
+
+GENERATION AI ACKNOWLEDGEMENT
 Claude and Gemini were used as educational resource for this assignment. 
 Such usage included:
   - Reviewing variable naming conventions 
@@ -9,6 +10,8 @@ Such usage included:
 
 Design choices and core algorithm logic were manually tested and verified by us.
 */
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Compile:     g++ Linear.cpp -o linear.out
 // Run:         ./linear.out
