@@ -1,3 +1,5 @@
+// Central .hpp file in same folder as examples so that main.cp files only needs to include "sklearn_lite.hpp"
+
 #ifndef SKLEARN_LITE_HPP
 #define SKLEARN_LITE_HPP
 
