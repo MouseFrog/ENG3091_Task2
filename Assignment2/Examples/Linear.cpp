@@ -1,3 +1,14 @@
+/*
+Generative AI Acknowledgement
+Claude and Gemini were used as educational resource for this assignment. 
+Such usage included:
+  - Reviewing variable naming conventions 
+  - General Coding & Debugging: resolving compilation errors, structuring class architecture
+  - Verifying file path structure adjustments for library organization.
+
+Design choices and core algorithm logic were manually tested and verified by us.
+*/
+
 // Compile:     g++ Linear.cpp -o linear.out
 // Run:         ./linear.out
 
@@ -7,7 +18,7 @@
 
 #include <iostream>
 #include <vector>
-#include "sklearn_lite.hpp"
+#include "sklearn_lite.hpp"``
 
 int main() {
 
