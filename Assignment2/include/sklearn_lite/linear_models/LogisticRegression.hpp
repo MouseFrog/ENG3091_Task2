@@ -21,10 +21,11 @@
 
 namespace sklearn_lite::linear_models {
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 // LOGISTIC MODEL
-// Parent of Binary and Multiclass
+// Parent of Binary and Multiclass Logistic Regression models
 // Abstract class, defines virtual fitting() and predicting()
+
 class LogisticModel {
 
     protected:
